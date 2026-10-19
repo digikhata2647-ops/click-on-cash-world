@@ -4,110 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Click on Cash World</title>
+
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f1f5f9;
-  margin: 0;
-  color: #172033;
-}
-header {
-  background: #123b70;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 15px;
-}
-.card {
-  background: white;
-  padding: 18px;
-  margin: 15px 0;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px #0001;
-}
-input, select, button {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin: 7px 0;
-  border: 1px solid #ccd3df;
-  border-radius: 7px;
-}
-button {
-  background: #087b50;
-  color: white;
-  border: none;
-  font-weight: bold;
-}
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f1f5f9;margin:0;color:#172033}
+header{background:#123b70;color:white;padding:22px 12px;text-align:center}
+.container{max-width:650px;margin:auto;padding:14px}
+.card{background:white;padding:18px;margin:15px 0;border-radius:12px;box-shadow:0 3px 12px #0001}
+input,select,button{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd3df;border-radius:7px;font-size:16px}
+button{background:#087b50;color:white;border:none;font-weight:bold;cursor:pointer}
+.note{color:#64748b;font-size:13px}
+.amount{background:#e8f5ee;padding:12px;border-radius:7px;font-weight:bold}
 </style>
 </head>
+
 <body>
 <header>
-  <h1>Click on Cash World</h1>
-  <p>Member Deposit & Withdrawal</p>
+<h1>Click on Cash World</h1>
+<p>Member Deposit & Withdrawal</p>
 </header>
 
 <div class="container">
-  <div class="card">
-    <h2>Deposit</h2>
-    <form id="depositForm">
-      <input name="member" placeholder="Member Name" required>
-      <input name="mobile" placeholder="Member Mobile Number" required>
 
-      <select name="method" required>
-        <option value="">Select Payment Method</option>
-        <option>Easypaisa</option>
-        <option>JazzCash</option>
-      </select>
+<div class="card">
+<h2>Member Details</h2>
+<input id="memberName" placeholder="Registered Member Name">
+<p class="note">Demo: Login system is not connected yet.</p>
+</div>
 
-      <input name="amount" type="number" placeholder="Package Amount (PKR)" required>
-      <input name="transaction" placeholder="Transaction ID" required>
-      <label>Payment Receipt</label>
-      <input name="receipt" type="file" accept="image/*" required>
+<div class="card">
+<h2>Deposit</h2>
+<form id="depositForm">
 
-      <button type="submit">Submit Deposit</button>
-    </form>
-  </div>
+<select id="package" required>
+<option value="">Select Package</option>
+<option value="500">Package 1 - PKR 500</option>
+<option value="1000">Package 2 - PKR 1,000</option>
+<option value="2000">Package 3 - PKR 2,000</option>
+<option value="5000">Package 4 - PKR 5,000</option>
+</select>
 
-  <div class="card">
-    <h2>Withdrawal</h2>
-    <form id="withdrawForm">
-      <input name="member" placeholder="Member Name" required>
-      <input name="mobile" placeholder="Member Mobile Number" required>
+<div class="amount">Package Amount: <span id="packageAmount">PKR 0</span></div>
 
-      <select name="method" required>
-        <option value="">Select Payment Method</option>
-        <option>Easypaisa</option>
-        <option>JazzCash</option>
-      </select>
+<select id="depositMethod" required>
+<option value="">Select Payment Method</option>
+<option>Easypaisa</option>
+<option>JazzCash</option>
+</select>
 
-      <input name="holder" placeholder="Account Holder Name" required>
-      <input name="account" placeholder="Account Number" required>
-      <input name="amount" type="number" placeholder="Withdrawal Amount (PKR)" required>
+<p><b>Admin Account Holder:</b> <span id="recipientName">Configure in code</span></p>
+<p><b>Admin Account Number:</b> <span id="recipientNumber">Configure in code</span></p>
+<button type="button" id="copyNumber">Copy Number</button>
 
-      <button type="submit">Submit Withdrawal</button>
-    </form>
-  </div>
+<input id="transactionId" placeholder="Transaction ID" required>
+<label>Payment Receipt</label>
+<input id="receipt" type="file" accept="image/*" required>
 
-  <div class="card">
-    <h2>Admin Panel</h2>
-    <p>Deposit and withdrawal requests will appear here after backend integration.</p>
-  </div>
+<button type="submit">Submit Deposit</button>
+</form>
+</div>
+
+<div class="card">
+<h2>Withdrawal</h2>
+<form id="withdrawForm">
+
+<input id="withdrawMember" placeholder="Registered Member Name" readonly required>
+
+<select id="withdrawMethod" required>
+<option value="">Select Payment Method</option>
+<option>Easypaisa</option>
+<option>JazzCash</option>
+</select>
+
+<input id="holderName" placeholder="Receiving Account Holder Name" required>
+<input id="accountNumber" placeholder="Receiving Account Number" required>
+<input id="withdrawAmount" type="number" min="200" step="1"
+placeholder="Withdrawal Amount (Minimum PKR 200)" required>
+
+<p class="note">Minimum withdrawal: PKR 200.</p>
+<button type="submit">Submit Withdrawal</button>
+</form>
+</div>
+
+<div class="card">
+<h2>Admin Panel</h2>
+<p>Deposit and withdrawal requests are not connected to a database yet.</p>
+<p class="note">This is a front-end demo only. Do not submit real payment information.</p>
+</div>
+
 </div>
 
 <script>
-document.getElementById("depositForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  alert("Demo only: Backend connection is still required.");
+const packageSelect = document.getElementById("package");
+const packageAmount = document.getElementById("packageAmount");
+const memberName = document.getElementById("memberName");
+const withdrawMember = document.getElementById("withdrawMember");
+
+packageSelect.addEventListener("change", function(){
+  packageAmount.textContent = this.value
+    ? "PKR " + Number(this.value).toLocaleString("en-PK")
+    : "PKR 0";
 });
 
-document.getElementById("withdrawForm").addEventListener("submit", function(e) {
+memberName.addEventListener("input", function(){
+  withdrawMember.value = this.value;
+});
+
+document.getElementById("copyNumber").addEventListener("click", async function(){
+  const number = document.getElementById("recipientNumber").textContent.trim();
+  if (!number || number === "Configure in code") {
+    alert("Admin payment account has not been configured.");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(number);
+    alert("Account number copied.");
+  } catch {
+    alert("Please copy the account number manually.");
+  }
+});
+
+document.getElementById("depositForm").addEventListener("submit", function(e){
   e.preventDefault();
-  alert("Demo only: Backend connection is still required.");
+  alert("Demo only: Deposit request has not been saved. Backend is required.");
+});
+
+document.getElementById("withdrawForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  if (!Number.isFinite(amount) || amount < 200) {
+    alert("Minimum withdrawal is PKR 200.");
+    return;
+  }
+  if (!Number.isInteger(amount)) {
+    alert("Please enter a whole-number amount.");
+    return;
+  }
+  alert("Demo only: Withdrawal request has not been saved. Backend is required.");
 });
 </script>
 </body>
